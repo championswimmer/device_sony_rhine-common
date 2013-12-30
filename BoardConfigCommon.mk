@@ -15,24 +15,7 @@
 # inherit from Sony common
 -include device/sony/common/BoardConfigCommon.mk
 
-# Graphics
-#TARGET_USES_QCOM_BSP := true
-#COMMON_GLOBAL_CFLAGS += -DQCOM_BSP
 BOARD_EGL_CFG := device/sony/rhine-common/rootdir/system/lib/egl/egl.cfg
-
-TARGET_QCOM_AUDIO_VARIANT := caf
-TARGET_QCOM_DISPLAY_VARIANT := caf
-TARGET_QCOM_MEDIA_VARIANT := caf
-
-# Shader cache config options
-# Maximum size of the  GLES Shaders that can be cached for reuse.
-# Increase the size if shaders of size greater than 12KB are used.
-MAX_EGL_CACHE_KEY_SIZE := 12*1024
-
-# Maximum GLES shader cache size for each app to store the compiled shader
-# binaries. Decrease the size if RAM or Flash Storage size is a limitation
-# of the device.
-MAX_EGL_CACHE_SIZE := 2048*1024
 
 # inherit from qcom-common
 -include device/sony/qcom-common/BoardConfigCommon.mk
@@ -96,8 +79,27 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 
 BOARD_USE_SONY_MACUPDATE := true
 
+<<<<<<< HEAD
 #pre-kitkat blobs
 COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
+=======
+# Shader cache config options
+# Maximum size of the  GLES Shaders that can be cached for reuse.
+# Increase the size if shaders of size greater than 12KB are used.
+MAX_EGL_CACHE_KEY_SIZE := 12*1024
+
+# Maximum GLES shader cache size for each app to store the compiled shader
+# binaries. Decrease the size if RAM or Flash Storage size is a limitation
+# of the device.
+MAX_EGL_CACHE_SIZE := 2048*1024
+
+# Audio
+BOARD_USES_ALSA_AUDIO := true
+
+# Camera
+USE_DEVICE_SPECIFIC_CAMERA := true
+BOARD_CAMERA_HAVE_ISO := true
+>>>>>>> b965e90... rhine: use aosp repos
 
 # GPS
 TARGET_PROVIDES_GPS_LOC_API := true
@@ -110,8 +112,12 @@ BLUETOOTH_HCI_USE_MCT := true
 # Time
 BOARD_USES_QC_TIME_SERVICES := true
 
-# Vold
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
+# Pre KK blob compat
+COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
+
+BOARD_CHARGER_ENABLE_SUSPEND := true
+
+BOARD_HARDWARE_CLASS := device/sony/rhine-common/cmhw
 
 # Custom boot
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
@@ -125,6 +131,7 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_USERIMAGES_USE_EXT4 := true
 
+<<<<<<< HEAD
 # Audio
 TARGET_QCOM_AUDIO_VARIANT := bfam
 BOARD_USES_ALSA_AUDIO := true
@@ -150,6 +157,8 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 
 BOARD_HARDWARE_CLASS := device/sony/rhine-common/cmhw
 
+=======
+>>>>>>> b965e90... rhine: use aosp repos
 # TWRP flags
 DEVICE_RESOLUTION := 1080x1920
 RECOVERY_GRAPHICS_USE_LINELENGTH := true

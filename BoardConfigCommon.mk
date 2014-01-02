@@ -15,20 +15,7 @@
 # inherit from Sony common
 -include device/sony/common/BoardConfigCommon.mk
 
-# Graphics
-#TARGET_USES_QCOM_BSP := true
-#COMMON_GLOBAL_CFLAGS += -DQCOM_BSP
 BOARD_EGL_CFG := device/sony/rhine-common/rootdir/system/lib/egl/egl.cfg
-
-# Shader cache config options
-# Maximum size of the  GLES Shaders that can be cached for reuse.
-# Increase the size if shaders of size greater than 12KB are used.
-MAX_EGL_CACHE_KEY_SIZE := 12*1024
-
-# Maximum GLES shader cache size for each app to store the compiled shader
-# binaries. Decrease the size if RAM or Flash Storage size is a limitation
-# of the device.
-MAX_EGL_CACHE_SIZE := 2048*1024
 
 # inherit from qcom-common
 -include device/sony/qcom-common/BoardConfigCommon.mk
@@ -73,7 +60,7 @@ TARGET_KRAIT_BIONIC_PLDSIZE   := 64
 # Kernel information
 BOARD_KERNEL_BASE     := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_CMDLINE  := androidboot.selinux=permissive androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 msm_rtb.enable=0 lpj=192598 dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y
+BOARD_KERNEL_CMDLINE  := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 msm_rtb.enable=0 lpj=192598 dwc3.maximum_speed=high dwc3_msm.prop_chg_detect=Y androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS  := --ramdisk_offset 0x02000000 --tags_offset 0x01E00000
 BOARD_KERNEL_SEPARATED_DT := true
 
@@ -95,6 +82,25 @@ BOARD_USE_SONY_MACUPDATE := true
 #pre-kitkat blobs
 COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
 
+# Shader cache config options
+# Maximum size of the  GLES Shaders that can be cached for reuse.
+# Increase the size if shaders of size greater than 12KB are used.
+MAX_EGL_CACHE_KEY_SIZE := 12*1024
+
+# Maximum GLES shader cache size for each app to store the compiled shader
+# binaries. Decrease the size if RAM or Flash Storage size is a limitation
+# of the device.
+MAX_EGL_CACHE_SIZE := 2048*1024
+
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
+
+# Audio
+BOARD_USES_ALSA_AUDIO := true
+
+# Camera
+USE_DEVICE_SPECIFIC_CAMERA := true
+BOARD_CAMERA_HAVE_ISO := true
+
 # GPS
 TARGET_PROVIDES_GPS_LOC_API := true
 
@@ -106,8 +112,12 @@ BLUETOOTH_HCI_USE_MCT := true
 # Time
 BOARD_USES_QC_TIME_SERVICES := true
 
-# Vold
-TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
+# Pre KK blob compat
+COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
+
+BOARD_CHARGER_ENABLE_SUSPEND := true
+
+BOARD_HARDWARE_CLASS := device/sony/rhine-common/cmhw
 
 # Custom boot
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
@@ -120,31 +130,6 @@ RECOVERY_FSTAB_VERSION := 2
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_USERIMAGES_USE_EXT4 := true
-
-# Audio
-TARGET_QCOM_AUDIO_VARIANT := bfam
-BOARD_USES_ALSA_AUDIO := true
-BOARD_USES_SEPERATED_AUDIO_INPUT := true
-QCOM_AUDIO_FEATURE_DISABLED_FLUENCE := true
-QCOM_AUDIO_FEATURE_DISABLED_SSR := true
-QCOM_AUDIO_FEATURE_DISABLED_ADSP_SSR := true
-QCOM_AUDIO_FEATURE_DISABLED_FM := true
-QCOM_AUDIO_FEATURE_DISABLED_WFD := true
-QCOM_AUDIO_FEATURE_DISABLED_PROXY_DEVICE := true
-QCOM_AUDIO_FEATURE_DISABLED_MULTICHANNELS := true
-#QCOM_AUDIO_FEATURE_DISABLED_TUNNEL_LPA := true
-
-COMMON_GLOBAL_CFLAGS += -DDOLBY_DAP -DQCOM_DS1_DOLBY_DAP -DLPA_DEFAULT_BUFFER_SIZE=512
-
-# Display
-TARGET_QCOM_DISPLAY_VARIANT := mdss
-
-# Media
-TARGET_QCOM_MEDIA_VARIANT := v4l2
-
-BOARD_CHARGER_ENABLE_SUSPEND := true
-
-BOARD_HARDWARE_CLASS := device/sony/rhine-common/cmhw
 
 # TWRP flags
 DEVICE_RESOLUTION := 1080x1920

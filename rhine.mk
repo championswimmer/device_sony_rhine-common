@@ -45,8 +45,7 @@ PRODUCT_COPY_FILES += \
 
 # GPS
 PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/rootdir/system/etc/gps.conf:system/etc/gps.conf \
-    $(COMMON_PATH)/rootdir/system/etc/sec_config:system/etc/sec_config
+    $(COMMON_PATH)/rootdir/system/etc/gps.conf:system/etc/gps.conf
 
 # WPA supplicant config
 PRODUCT_COPY_FILES += \
@@ -57,10 +56,12 @@ PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/rootdir/fstab.qcom:root/fstab.qcom \
     $(COMMON_PATH)/rootdir/fstab.qcom:recovery/root/fstab.qcom
 
-# Prima wifi config
+# Wifi config and firmware
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/rootdir/system/etc/init.qcom.wifi.sh:system/etc/init.qcom.wifi.sh \
-    $(COMMON_PATH)/rootdir/system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
+    $(COMMON_PATH)/rootdir/system/etc/firmware/wlan/prima/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    $(COMMON_PATH)/rootdir/system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini \
+    $(COMMON_PATH)/rootdir/system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
 # QCOM Display
 PRODUCT_PACKAGES += \
@@ -99,11 +100,16 @@ PRODUCT_PACKAGES += \
 
 # Audio
 PRODUCT_PACKAGES += \
+    audio.primary.msm8974 \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
     libaudio-resampler \
     tinymix
+
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/rootdir/system/etc/mixer_paths.xml:system/etc/mixer_paths.xml \
+    $(COMMON_PATH)/rootdir/system/etc/audio_policy.conf:system/etc/audio_policy.conf
 
 # BT
 PRODUCT_PACKAGES += \
@@ -121,15 +127,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(COMMON_PATH)/rootdir/system/etc/init.qcom.fm.sh:system/etc/init.qcom.fm.sh
 
-# Key layouts
-PRODUCT_COPY_FILES += \
-    $(COMMON_PATH)/rootdir/system/usr/keylayout/Button_Jack.kl:system/usr/keylayout/Button_Jack.kl \
-    $(COMMON_PATH)/rootdir/system/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(COMMON_PATH)/rootdir/system/usr/keylayout/mhl-rcp.kl:system/usr/keylayout/mhl-rcp.kl
-
 # Misc
 PRODUCT_PACKAGES += \
-    librs_jni \
     com.android.future.usb.accessory
 
 # Live Wallpapers
@@ -137,6 +136,7 @@ PRODUCT_PACKAGES += \
     LiveWallpapers \
     LiveWallpapersPicker \
     VisualizationWallpapers \
+    librs_jni
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
@@ -172,27 +172,39 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.audio.handset.mic=analog \
-    persist.audio.hp=true \
-    ro.qc.sdk.audio.fluencetype=none \
-    persist.speaker.prot.enable=false \
-    lpa.decode=false \
-    lpa.use-stagefright=true \
-    tunnel.decode=false \
-    tunnel.audiovideo.decode=false \
-    tunnel.multiple=false
+    af.resampler.quality=4
+
+# Enable AAC 5.1 output
+PRODUCT_PROPERTY_OVERRIDES += \
+    media.aac_51_output_enabled=true
 
 # aDSP
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qualcomm.sensors.qmd=false \
+    ro.qualcomm.sensors.qmd=true \
     debug.qualcomm.sns.hal=w \
     ro.qc.sdk.sensors.gestures=false \
     ro.qc.sensors.max_accel_rate=false \
     ro.qc.sensors.max_gyro_rate=false \
     ro.qc.sensors.max_mag_rate=false \
-    ro.qualcomm.sensors.pedometer=false \
+    ro.qualcomm.sensors.pedometer=true \
     ro.qualcomm.sensors.pam=false \
     ro.qualcomm.sensors.scrn_ortn=false
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.hwc.mdpcomp.enable=true
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.hwui.texture_cache_size=72 \
+    ro.hwui.layer_cache_size=48 \
+    ro.hwui.r_buffer_cache_size=8 \
+    ro.hwui.path_cache_size=32 \
+    ro.hwui.gradient_cache_size=1 \
+    ro.hwui.drop_shadow_cache_size=6 \
+    ro.hwui.texture_cache_flushrate=0.4 \
+    ro.hwui.text_small_cache_width=1024 \
+    ro.hwui.text_small_cache_height=1024 \
+    ro.hwui.text_large_cache_width=2048 \
+    ro.hwui.text_large_cache_height=1024
 
 # WFD
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -206,11 +218,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Time
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.timed.enable=true
-
-# VIDC debug_levels
-# 1:ERROR 2:HIGH 4:LOW 0:NOLOGS 7:AllLOGS
-PRODUCT_PROPERTY_OVERRIDES += \
-    vidc.debug.level=1
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
